@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepWay - Study Smarter</title>
+    
+    
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+<link rel="stylesheet" href="/styles/main.css">
+
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',
+                        'primary-dark': '#4338CA',
+                        'primary-light': '#818CF8'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#home" class="flex items-center space-x-2">
+                        <span class="text-primary text-xl font-bold">PrepWay</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="#home" class="nav-link text-gray-700 hover:text-primary">Home</a>
+                    <a href="#features" class="nav-link text-gray-700 hover:text-primary">Features</a>
+                    <button id="loginBtn" class="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-dark transition-colors">Login</button>
+                    <button id="signupBtn" class="border-2 border-primary text-primary px-4 py-2 rounded-md hover:bg-primary hover:text-white transition-colors">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+   
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="min-h-screen flex items-center bg-gradient-to-b from-white to-indigo-50 pt-16">
+            <div class="max-w-7xl mx-auto px-4 text-center">
+                <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-8">Study Smarter with PrepWay</h1>
+                <p class="text-xl text-gray-600 mb-12">Enhance your learning experience with our collaborative platform.</p>
+                <button id="getStartedBtn" class="bg-primary text-white px-8 py-4 rounded-lg text-lg hover:bg-primary-dark transition-all transform hover:scale-105">
+                    Get Started
+                </button>
+            </div>
+        </section>
+
+        
+        <section id="features" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4">
+                <h2 class="text-4xl font-bold text-center mb-16">Features</h2>
+                <div id="featuresList" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Features will be dynamically loaded here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Auth Modals -->
+    <div id="loginModal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="modal-content bg-white p-8 rounded-lg w-96 max-w-md mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Login</h2>
+                <button class="closeModal text-gray-500 hover:text-gray-700">×</button>
+            </div>
+            <form id="loginForm" class="space-y-4">
+                <div class="space-y-2">
+                    <label for="loginEmail" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="loginEmail" name="email" required class="form-input">
+                </div>
+                <div class="space-y-2">
+                    <label for="loginPassword" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="loginPassword" name="password" required class="form-input">
+                </div>
+                <button type="submit" class="w-full bg-primary text-white py-2 rounded-md hover:bg-primary-dark transition-colors">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="signupModal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="modal-content bg-white p-8 rounded-lg w-96 max-w-md mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Create Account</h2>
+                <button class="closeModal text-gray-500 hover:text-gray-700">×</button>
+            </div>
+            <form id="signupForm" class="space-y-4">
+                <div class="space-y-2">
+                    <label for="signupName" class="block text-sm font-medium text-gray-700">Full Name</label>
+                    <input type="text" id="signupName" name="name" required class="form-input">
+                </div>
+                <div class="space-y-2">
+                    <label for="signupEmail" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="signupEmail" name="email" required class="form-input">
+                </div>
+                <div class="space-y-2">
+                    <label for="signupPassword" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="signupPassword" name="password" required class="form-input">
+                </div>
+                <button type="submit" class="w-full bg-primary text-white py-2 rounded-md hover:bg-primary-dark transition-colors">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="flashMessages" class="fixed top-4 right-4 z-50"></div>
+
+    <!-- Socket.IO -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    
+  
+    <script src="/scripts/main.js"></script>
+</body>
+</html>
