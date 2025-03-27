@@ -1,8 +1,10 @@
+
+
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
     try {
-        await mongoose.connect('mongodb+srv://wldbs1567:mongoDB-Joice@joanne93.5abw2tw.mongodb.net/prepway?retryWrites=true&w=majority&appName=Joanne93');
+        await mongoose.connect(process.env.MONGODB_URI);
         console.log('Connected to MongoDB Atlas');
     } catch (error) {
         console.error('MongoDB Atlas connection error:', error);
