@@ -22,12 +22,19 @@
                     </a>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <div class="relative notification-button">
-                        <button class="flex items-center text-gray-600 hover:text-primary">
-                            <i class="fas fa-bell text-xl"></i>
-                            <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 text-xs flex items-center justify-center">3</span>
-                        </button>
-                    </div>
+                <div class="relative notification-button">
+  <button onclick="toggleNotif()" class="flex items-center text-gray-600 hover:text-primary">
+    <i class="fas fa-bell text-xl"></i>
+    <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 text-xs flex items-center justify-center">3</span>
+  </button>
+
+  <div id="notif-box" class="hidden absolute right-0 mt-2 w-72 bg-white border border-gray-200 rounded-xl shadow-lg z-50 p-4 text-sm">
+    <p class="mb-2">📅 Chemistry Quiz Tomorrow</p>
+    <p class="mb-2">✅ New Flashcards Added</p>
+    <p>📈 Performance Report Ready</p>
+  </div>
+</div>
+
                     <div class="relative profile-button">
                         <button class="flex items-center space-x-2 text-gray-600 hover:text-primary">
                             <img src="https://ui-avatars.com/api/?name=John+Doe" alt="Profile" class="w-8 h-8 rounded-full">
