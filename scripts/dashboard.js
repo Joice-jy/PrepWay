@@ -166,3 +166,10 @@ process.exit(1);
 };
 
 module.exports = connectDB;
+
+// Toggle notifications dropdown
+function toggleNotif() {
+  const box = document.getElementById('notif-box');
+  box.classList.toggle('hidden');
+}
+
