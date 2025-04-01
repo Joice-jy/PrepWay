@@ -11,27 +11,27 @@
     --text: #1F2937;
     --text-light: #6B7280;
     --border: #E5E7EB;
-    }
-    
-    /* Base Styles */
-    html {
+}
+
+/* Base Styles */
+html {
     scroll-behavior: smooth;
-    }
-    
-    body {
-    font-family: 'Inter', sans-serif;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
     color: var(--text);
     background-color: var(--background);
     line-height: 1.5;
-    }
-    
-    /* Navigation */
-    .nav-link {
+}
+
+/* Navigation */
+.nav-link {
     position: relative;
     transition: color 0.3s ease;
-    }
-    
-    .nav-link::after {
+}
+
+.nav-link::after {
     content: '';
     position: absolute;
     bottom: -2px;
@@ -40,186 +40,298 @@
     height: 2px;
     background-color: var(--primary);
     transition: width 0.3s ease;
-    }
-    
-    .nav-link:hover::after,
-    .nav-link.active::after {
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
     width: 100%;
-    }
-    
-    /* Buttons */
-    .btn {
-    padding: 0.5rem 1rem;
-    border-radius: 0.375rem;
+}
+
+/* Dashboard Components */
+.dashboard-card {
+    @apply bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300;
+}
+
+.dashboard-icon {
+    @apply w-12 h-12 rounded-full flex items-center justify-center text-xl;
+}
+
+.dashboard-label {
+    @apply text-sm text-gray-600 font-medium;
+}
+
+.dashboard-stat {
+    @apply text-xl font-semibold text-gray-900;
     transition: all 0.3s ease;
-    cursor: pointer;
-    }
-    
-    .btn-primary {
-    background-color: var(--primary);
-    color: white;
-    }
-    
-    .btn-primary:hover {
-    background-color: var(--primary-dark);
-    transform: translateY(-1px);
-    }
-    
-    .btn-outline {
-    border: 2px solid var(--primary);
-    color: var(--primary);
-    background-color: transparent;
-    }
-    
-    .btn-outline:hover {
-    background-color: var(--primary);
-    color: white;
-    }
-    
-    /* Forms */
-    .form-input {
-    width: 100%;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid var(--border);
-    border-radius: 0.375rem;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-    
-    .form-input:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-    }
-    
-    /* Modals */
-    .modal {
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    }
-    
-    .modal.show {
-    opacity: 1;
-    visibility: visible;
-    }
-    
-    .modal-content {
-    transform: translateY(20px);
-    transition: transform 0.3s ease;
-    }
-    
-    .modal.show .modal-content {
-    transform: translateY(0);
-    }
-    
-    /* Cards */
-    .card {
-    background-color: white;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    
-    .card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    /* Animations */
-    @keyframes fadeIn {
-    from {
-    opacity: 0;
-    transform: translateY(10px);
-    }
-    to {
-    opacity: 1;
-    transform: translateY(0);
-    }
-    }
-    
-    @keyframes slideIn {
-    from {
-    transform: translateX(-20px);
-    opacity: 0;
-    }
-    to {
-    transform: translateX(0);
-    opacity: 1;
-    }
-    }
-    
-    /* Flash Messages */
-    .flash-message {
-    animation: slideIn 0.3s ease;
-    }
-    
-    /* Loading States */
-    .loading {
-    position: relative;
-    pointer-events: none;
-    }
-    
-    .loading::after {
+}
+
+/* Add pulse animation for updated stats */
+.dashboard-stat.updated {
+    animation: pulse 1s ease;
+}
+
+/* Sidebar */
+.sidebar-link {
+    @apply flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-primary transition-colors duration-200;
+}
+
+.sidebar-link.active {
+    @apply bg-primary bg-opacity-10 text-primary;
+}
+
+.sidebar-icon {
+    @apply w-5 h-5;
+}
+
+/* Activity Feed */
+.activity-item {
+    @apply flex items-start space-x-4 p-4 rounded-lg hover:bg-gray-50 transition-colors duration-200;
+    animation: slideDown 0.3s ease forwards;
+}
+
+.activity-icon {
+    @apply w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0;
+}
+
+.activity-content {
+    @apply flex-1;
+}
+
+.activity-title {
+    @apply text-sm font-medium text-gray-900;
+}
+
+.activity-meta {
+    @apply text-xs text-gray-500 mt-1;
+}
+
+
+.activity-item.new {
+    animation: highlightNew 2s ease;
+}
+
+
+.notification-button {
+    @apply relative;
+}
+
+#notif-box {
+    @apply transform opacity-0 scale-95 transition-all duration-200;
+}
+
+#notif-box.show {
+    @apply opacity-100 scale-100;
+}
+
+/* Notification Badge Animation */
+#notificationCount {
+    transition: transform 0.2s ease;
+}
+
+#notificationCount.updated {
+    animation: bounce 0.5s ease;
+}
+
+
+#profile-dropdown {
+    @apply transform opacity-0 scale-95 transition-all duration-200;
+}
+
+#profile-dropdown.show {
+    @apply opacity-100 scale-100;
+}
+
+
+.loading {
+    @apply relative pointer-events-none;
+}
+
+.loading::after {
     content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 1.5rem;
-    height: 1.5rem;
-    border: 2px solid var(--primary);
-    border-radius: 50%;
-    border-top-color: transparent;
+    @apply absolute top-1/2 left-1/2 w-6 h-6 border-2 border-primary border-t-transparent rounded-full;
     animation: spin 0.8s linear infinite;
-    }
-    
-    @keyframes spin {
+    transform: translate(-50%, -50%);
+}
+
+/* Study Materials */
+.study-material {
+    @apply transition-all duration-300;
+}
+
+.study-material:hover {
+    @apply transform -translate-y-1 shadow-md;
+}
+
+/* Animations */
+@keyframes spin {
     to {
-    transform: rotate(360deg);
+        transform: translate(-50%, -50%) rotate(360deg);
     }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
     }
-    
-    /* Responsive Design */
-    @media (max-width: 768px) {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+        color: var(--primary);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+@keyframes highlightNew {
+    0% {
+        background-color: rgba(79, 70, 229, 0.1);
+    }
+    100% {
+        background-color: transparent;
+    }
+}
+
+
+#errorToast {
+    @apply fixed bottom-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-full opacity-0 transition-all duration-300;
+}
+
+
+.success-toast {
+    @apply fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-full opacity-0 transition-all duration-300;
+}
+
+
+.animate-fade-in {
+    animation: fadeIn 0.3s ease forwards;
+}
+
+.animate-slide-in {
+    animation: slideIn 0.3s ease forwards;
+}
+
+.transition-all {
+    transition: all 0.3s ease;
+}
+
+.hover-scale {
+    transition: transform 0.3s ease;
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+.hover-shadow {
+    transition: box-shadow 0.3s ease;
+}
+
+.hover-shadow:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Empty State Styles */
+.empty-state {
+    @apply flex flex-col items-center justify-center p-8 text-gray-500;
+}
+
+.empty-state i {
+    @apply text-4xl mb-4 text-gray-400;
+}
+
+
+@media (max-width: 768px) {
     .nav-link::after {
-    display: none;
+        display: none;
     }
-    
+
     .btn {
         padding: 0.375rem 0.75rem;
     }
-    
+
     .modal-content {
         margin: 1rem;
         max-height: calc(100vh - 2rem);
         overflow-y: auto;
     }
+
+    .dashboard-card {
+        @apply p-4;
     }
-    
-    /* Utility Classes */
-    .animate-fade-in {
-    animation: fadeIn 0.3s ease;
+
+    .activity-item {
+        @apply p-3;
     }
-    
-    .animate-slide-in {
-    animation: slideIn 0.3s ease;
+
+    .dashboard-icon {
+        @apply w-10 h-10;
     }
-    
-    .transition-all {
-    transition: all 0.3s ease;
+
+    .dashboard-stat {
+        @apply text-lg;
     }
-    
-    .hover-scale {
-    transition: transform 0.3s ease;
+}
+
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #1F2937;
+        --text: #F9FAFB;
+        --text-light: #D1D5DB;
+        --border: #374151;
     }
-    
-    .hover-scale:hover {
-    transform: scale(1.05);
+
+    .dashboard-card {
+        @apply bg-gray-800;
     }
-    
-    .hover-shadow {
-    transition: box-shadow 0.3s ease;
+
+    .sidebar-link:hover {
+        @apply bg-gray-800;
     }
-    
-    .hover-shadow:hover {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    .activity-item:hover {
+        @apply bg-gray-800;
     }
+}
