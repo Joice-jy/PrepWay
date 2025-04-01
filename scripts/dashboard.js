@@ -410,3 +410,34 @@ document.addEventListener('click', function(event) {
 window.updateQuizScore = updateQuizScore;
 window.updateStudyTime = updateStudyTime;
 window.addActivity = addActivity;
+
+
+
+function openProfile() {
+  document.getElementById('profileModal').classList.remove('hidden');
+}
+
+function closeProfile() {
+  document.getElementById('profileModal').classList.add('hidden');
+}
+
+function saveProfile() {
+  const name = document.getElementById('profileName').value;
+  const email = document.getElementById('profileEmail').value;
+
+  const profileNameDisplay = document.querySelector('.profile-button span');
+  if (profileNameDisplay) profileNameDisplay.textContent = name;
+
+  closeProfile();
+  alert("Profile updated!");
+}
+
+
+
+
+
+
+
+
+
+
