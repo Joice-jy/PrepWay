@@ -105,12 +105,12 @@ body {
     @apply text-xs text-gray-500 mt-1;
 }
 
-
+/* New Activity Animation */
 .activity-item.new {
     animation: highlightNew 2s ease;
 }
 
-
+/* Notifications */
 .notification-button {
     @apply relative;
 }
@@ -132,7 +132,7 @@ body {
     animation: bounce 0.5s ease;
 }
 
-
+/* Profile Dropdown */
 #profile-dropdown {
     @apply transform opacity-0 scale-95 transition-all duration-200;
 }
@@ -141,7 +141,7 @@ body {
     @apply opacity-100 scale-100;
 }
 
-
+/* Loading States */
 .loading {
     @apply relative pointer-events-none;
 }
@@ -233,17 +233,17 @@ body {
     }
 }
 
-
+/* Error Toast */
 #errorToast {
     @apply fixed bottom-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-full opacity-0 transition-all duration-300;
 }
 
-
+/* Success Toast */
 .success-toast {
     @apply fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-full opacity-0 transition-all duration-300;
 }
 
-
+/* Utility Classes */
 .animate-fade-in {
     animation: fadeIn 0.3s ease forwards;
 }
@@ -281,7 +281,7 @@ body {
     @apply text-4xl mb-4 text-gray-400;
 }
 
-
+/* Responsive Design */
 @media (max-width: 768px) {
     .nav-link::after {
         display: none;
@@ -314,7 +314,7 @@ body {
     }
 }
 
-
+/* Dark Mode Support */
 @media (prefers-color-scheme: dark) {
     :root {
         --background: #1F2937;
