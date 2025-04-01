@@ -11,7 +11,7 @@
     <script src="scripts/dashboard.js" defer></script>
 </head>
 <body class="bg-gray-50">
-    <!-- Navigation -->
+
     <nav class="bg-white shadow-lg fixed w-full z-10">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center h-16">
@@ -22,32 +22,36 @@
                     </a>
                 </div>
                 <div class="flex items-center space-x-4">
-                <div class="relative notification-button">
-  <button onclick="toggleNotif()" class="flex items-center text-gray-600 hover:text-primary">
-    <i class="fas fa-bell text-xl"></i>
-    <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 text-xs flex items-center justify-center">3</span>
-  </button>
+                    <div class="relative notification-button">
+                        <button onclick="toggleNotif()" class="flex items-center text-gray-600 hover:text-primary">
+                            <i class="fas fa-bell text-xl"></i>
+                            <span id="notificationCount" class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 text-xs flex items-center justify-center">0</span>
+                        </button>
 
-  <div id="notif-box" class="hidden absolute right-0 mt-2 w-72 bg-white border border-gray-200 rounded-xl shadow-lg z-50 p-4 text-sm">
-    <p class="mb-2">📅 Chemistry Quiz Tomorrow</p>
-    <p class="mb-2">✅ New Flashcards Added</p>
-    <p>📈 Performance Report Ready</p>
-  </div>
-</div>
+                        <div id="notif-box" class="hidden absolute right-0 mt-2 w-72 bg-white border border-gray-200 rounded-xl shadow-lg z-50 p-4 text-sm">
+                            <div id="notificationList">
+                    
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="relative profile-button">
-                        <button class="flex items-center space-x-2 text-gray-600 hover:text-primary">
-                            <img src="https://ui-avatars.com/api/?name=John+Doe" alt="Profile" class="w-8 h-8 rounded-full">
-                            <span>John Doe</span>
+                        <button onclick="toggleProfile()" class="flex items-center space-x-2 text-gray-600 hover:text-primary">
+                            <img id="profileImg" src="https://ui-avatars.com/api/?background=random" alt="Profile" class="w-8 h-8 rounded-full">
+                            <span id="profileName" class="animate-fade-in">Loading...</span>
                             <i class="fas fa-chevron-down"></i>
                         </button>
+                        <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-50">
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile Settings</a>
+                            <a href="#" onclick="handleLogout()" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Logout</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Sidebar -->
+   
     <div class="fixed inset-y-0 left-0 w-64 bg-white shadow-lg pt-16">
         <div class="flex flex-col h-full">
             <div class="flex-1 overflow-y-auto">
@@ -83,7 +87,7 @@
                     <i class="fas fa-cog sidebar-icon"></i>
                     <span>Settings</span>
                 </a>
-                <a href="/" class="sidebar-link">
+                <a href="#" onclick="handleLogout()" class="sidebar-link text-red-600">
                     <i class="fas fa-sign-out-alt sidebar-icon"></i>
                     <span>Logout</span>
                 </a>
@@ -91,15 +95,15 @@
         </div>
     </div>
 
-  
+    <!-- Main Content -->
     <div class="ml-64 pt-16 px-8">
-        
+        <!-- Welcome Section -->
         <div class="py-8">
-            <h1 class="text-2xl font-bold text-gray-900">Welcome back, John! 👋</h1>
+            <h1 id="welcomeMessage" class="text-2xl font-bold text-gray-900 animate-fade-in">Welcome back!</h1>
             <p class="text-gray-600 mt-1">Here's an overview of your study progress</p>
         </div>
 
-      
+        <!-- Stats Grid -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div class="dashboard-card">
                 <div class="flex items-center">
@@ -108,7 +112,7 @@
                     </div>
                     <div class="ml-4">
                         <h2 class="dashboard-label">Study Time</h2>
-                        <p class="dashboard-stat study-time">12.5 hrs</p>
+                        <p id="studyTime" class="dashboard-stat animate-fade-in">--</p>
                     </div>
                 </div>
             </div>
@@ -119,7 +123,7 @@
                     </div>
                     <div class="ml-4">
                         <h2 class="dashboard-label">Completed</h2>
-                        <p class="dashboard-stat">24 Tasks</p>
+                        <p id="completedTasks" class="dashboard-stat animate-fade-in">--</p>
                     </div>
                 </div>
             </div>
@@ -130,7 +134,7 @@
                     </div>
                     <div class="ml-4">
                         <h2 class="dashboard-label">Quiz Score</h2>
-                        <p class="dashboard-stat">85%</p>
+                        <p id="quizScore" class="dashboard-stat animate-fade-in">--%</p>
                     </div>
                 </div>
             </div>
@@ -141,68 +145,42 @@
                     </div>
                     <div class="ml-4">
                         <h2 class="dashboard-label">Flashcards</h2>
-                        <p class="dashboard-stat">156</p>
+                        <p id="flashcardCount" class="dashboard-stat animate-fade-in">--</p>
                     </div>
                 </div>
             </div>
         </div>
 
-  
+        
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-    
+            
             <div class="dashboard-card activity-feed">
                 <h2 class="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h2>
-                <div class="space-y-4">
-                    <div class="activity-item">
-                        <div class="activity-icon bg-indigo-100">
-                            <i class="fas fa-clipboard-check text-primary"></i>
-                        </div>
-                        <div class="activity-content">
-                            <p class="activity-title">Completed Quiz: Advanced Mathematics</p>
-                            <p class="activity-meta">Score: 92% • 2 hours ago</p>
-                        </div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="activity-icon bg-green-100">
-                            <i class="fas fa-plus text-green-600"></i>
-                        </div>
-                        <div class="activity-content">
-                            <p class="activity-title">Created new flashcard set: Physics Laws</p>
-                            <p class="activity-meta">32 cards • 5 hours ago</p>
-                        </div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="activity-icon bg-blue-100">
-                            <i class="fas fa-upload text-blue-600"></i>
-                        </div>
-                        <div class="activity-content">
-                            <p class="activity-title">Uploaded study material: Chemistry Notes</p>
-                            <p class="activity-meta">PDF • Yesterday</p>
-                        </div>
+                <div id="activityFeed" class="space-y-4">
+                 
+                    <div class="flex items-center justify-center p-4">
+                        <div class="loading"></div>
                     </div>
                 </div>
-                <button class="mt-4 text-primary hover:text-indigo-600 text-sm font-medium">View All Activity →</button>
+                <button onclick="loadMoreActivity()" class="mt-4 text-primary hover:text-indigo-600 text-sm font-medium">View All Activity →</button>
             </div>
 
-          
+         
             <div class="dashboard-card">
                 <h2 class="text-lg font-semibold text-gray-900 mb-4">Recent Study Materials</h2>
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                        <div class="flex items-center">
-                            <i class="fas fa-file-pdf text-red-500 text-xl mr-3"></i>
-                            <div>
-                                <p class="text-sm font-medium text-gray-900">Chemistry Notes.pdf</p>
-                                <p class="text-xs text-gray-500">Added yesterday</p>
-                            </div>
-                        </div>
-                        <button class="text-primary hover:text-indigo-600">
-                            <i class="fas fa-download"></i>
-                        </button>
+                <div id="studyMaterialsList" class="space-y-4">
+                  
+                    <div class="flex items-center justify-center p-4">
+                        <div class="loading"></div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Errors -->
+    <div id="errorToast" class="fixed bottom-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-full opacity-0 transition-all duration-300">
+        <p id="errorMessage"></p>
     </div>
 </body>
 </html>
