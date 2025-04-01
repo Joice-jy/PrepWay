@@ -203,6 +203,31 @@
       <button onclick="closeProfile()" class="bg-gray-300 px-4 py-2 rounded">Cancel</button>
       <button onclick="saveProfile()" class="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
     </div>
+
+<!-- Profile Picture Upload -->
+<label class="block">
+    Profile Picture:
+    <input type="file" id="profilePicInput" accept="image/*" class="mt-1" onchange="previewProfilePic()" />
+  </label>
+  <div class="my-2">
+    <img id="profilePicPreview" src="https://ui-avatars.com/api/?name=John+Doe" alt="Profile Preview" class="w-20 h-20 rounded-full" />
+  </div>
+  
+  <!-- Password Update -->
+  <label class="block">
+    New Password:
+    <input id="profilePassword" type="password" class="border w-full mt-1 p-2 rounded" placeholder="Leave blank to keep current password" />
+  </label>
+
+
+
+
+
+
+
+
+
+      
   </div>
 </div>
 
