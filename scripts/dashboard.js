@@ -432,6 +432,54 @@ function saveProfile() {
   alert("Profile updated!");
 }
 
+async function saveProfile() {
+  const name = document.getElementById('profileName').value;
+  const email = document.getElementById('profileEmail').value;
+  const password = document.getElementById('profilePassword').value;
+  const userId = localStorage.getItem('userId');
+
+  const profilePicFile = document.getElementById('profilePicInput').files[0];
+  const formData = new FormData();
+
+  formData.append('userId', userId);
+  formData.append('name', name);
+  formData.append('email', email);
+  if (password) formData.append('password', password);
+  if (profilePicFile) formData.append('profilePicture', profilePicFile);
+
+  try {
+    const res = await fetch('/api/update-profile', {
+      method: 'POST',
+      body: formData
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      document.querySelector('.profile-button span').textContent = name;
+      closeProfile();
+      alert('Profile updated!');
+    } else {
+      alert('Update failed: ' + data.message);
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Something went wrong.');
+  }
+}
+function previewProfilePic() {
+  const input = document.getElementById('profilePicInput');
+  const preview = document.getElementById('profilePicPreview');
+  const file = input.files[0];
+
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      preview.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
 
 
 
