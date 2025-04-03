@@ -57,3 +57,21 @@ const PORT = 8000;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+//////NEWWWW
+app.post('/api/profile/update', (req, res) => {
+    const { name, email } = req.body;
+  
+    // TODO: Replace this with actual user lookup (e.g., from session or JWT)
+    const fakeUserId = '1234';
+  
+    // Save/update user in MongoDB
+    User.findByIdAndUpdate(fakeUserId, { name, email }, { new: true, upsert: true })
+      .then((updatedUser) => {
+        res.json({ success: true, user: updatedUser });
+      })
+      .catch((err) => {
+        console.error('DB error:', err);
+        res.status(500).json({ success: false, error: 'Server error' });
+      });
+  });
