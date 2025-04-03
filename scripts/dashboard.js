@@ -421,15 +421,37 @@ function closeProfile() {
   document.getElementById('profileModal').classList.add('hidden');
 }
 
-function saveProfile() {
+ function saveProfile() {
   const name = document.getElementById('profileName').value;
   const email = document.getElementById('profileEmail').value;
 
+  // Save to localStorage
+  localStorage.setItem('profileName', name);
+  localStorage.setItem('profileEmail', email);
+
+  // Update UI
   const profileNameDisplay = document.querySelector('.profile-button span');
   if (profileNameDisplay) profileNameDisplay.textContent = name;
 
-  closeProfile();
-  alert("Profile updated!");
+  // Send to backend
+  fetch('/api/profile/update', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ name, email }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log('Profile saved to DB:', data);
+      alert('Profile updated!');
+      closeProfile();
+    })
+    .catch((err) => {
+      console.error('Failed to save profile:', err);
+      alert('Something went wrong. Try again.');
+    });
+
 }
 
 async function saveProfile() {
@@ -480,7 +502,24 @@ function previewProfilePic() {
   }
 }
 
-
+////LOAD PROFILE DATA ON PAGE LAOD NEWWWWWWWWWWW
+function loadProfileFromLocal() {
+    const name = localStorage.getItem('profileName');
+    const email = localStorage.getItem('profileEmail');
+  
+    if (name) {
+      document.getElementById('profileName').value = name;
+      const profileNameDisplay = document.querySelector('.profile-button span');
+      if (profileNameDisplay) profileNameDisplay.textContent = name;
+    }
+  
+    if (email) {
+      document.getElementById('profileEmail').value = email;
+    }
+  }
+  
+  // Call this at the bottom of dashboard.js
+  loadProfileFromLocal();
 
 
 
