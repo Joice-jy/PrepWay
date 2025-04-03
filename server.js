@@ -6,6 +6,7 @@ const rateLimit = require('express-rate-limit');
 const connectDB = require('./config/database');
 const authRoutes = require('./routes/authRoutes');
 const studyRoutes = require('./routes/study');
+const cors = require('cors');
 
 const app = express();
 
@@ -19,6 +20,7 @@ const limiter = rateLimit({
 });
 
 // Middleware
+app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 app.use('/uploads', express.static('uploads'));
