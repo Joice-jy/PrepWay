@@ -34,6 +34,7 @@ function handleLogout() {
     localStorage.removeItem('token');
     localStorage.removeItem('userData');
     localStorage.removeItem('quizScores');
+    localStorage.removeItem('userName');
     window.location.href = '/';
 }
 
@@ -390,6 +391,11 @@ function loadDashboard() {
 }
 
 // Event Listeners
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Dashboard page loaded'); // Debug log
+    checkAuthStatus();
+});
+
 document.addEventListener('DOMContentLoaded', loadDashboard);
 
 // Close dropdowns when clicking outside
@@ -411,8 +417,6 @@ window.updateQuizScore = updateQuizScore;
 window.updateStudyTime = updateStudyTime;
 window.addActivity = addActivity;
 
-
-
 function openProfile() {
   document.getElementById('profileModal').classList.remove('hidden');
 }
@@ -421,37 +425,15 @@ function closeProfile() {
   document.getElementById('profileModal').classList.add('hidden');
 }
 
- function saveProfile() {
+function saveProfile() {
   const name = document.getElementById('profileName').value;
   const email = document.getElementById('profileEmail').value;
 
-  // Save to localStorage
-  localStorage.setItem('profileName', name);
-  localStorage.setItem('profileEmail', email);
-
-  // Update UI
   const profileNameDisplay = document.querySelector('.profile-button span');
   if (profileNameDisplay) profileNameDisplay.textContent = name;
 
-  // Send to backend
-  fetch('/api/profile/update', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ name, email }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log('Profile saved to DB:', data);
-      alert('Profile updated!');
-      closeProfile();
-    })
-    .catch((err) => {
-      console.error('Failed to save profile:', err);
-      alert('Something went wrong. Try again.');
-    });
-
+  closeProfile();
+  alert("Profile updated!");
 }
 
 async function saveProfile() {
@@ -488,6 +470,7 @@ async function saveProfile() {
     alert('Something went wrong.');
   }
 }
+
 function previewProfilePic() {
   const input = document.getElementById('profilePicInput');
   const preview = document.getElementById('profilePicPreview');
@@ -502,30 +485,62 @@ function previewProfilePic() {
   }
 }
 
-////
-function loadLoggedInUser() {
-  fetch('/api/profile')
-    .then(res => res.json())
-    .then(data => {
-      const { name, email } = data.user;
+async function checkAuthStatus() {
+    const token = localStorage.getItem('token');
+    const storedUserName = localStorage.getItem('userName');
+    
+    // Update both welcome message and profile name from localStorage first
+    const welcomeMessage = document.getElementById('welcomeMessage');
+    const profileName = document.getElementById('profileName');
+    
+    if (storedUserName) {
+        if (welcomeMessage) {
+            welcomeMessage.textContent = `Welcome back, ${storedUserName}!`;
+        }
+        if (profileName) {
+            profileName.textContent = storedUserName;
+        }
+    }
 
-      // Update profile modal inputs
-      document.getElementById('profileName').value = name;
-      document.getElementById('profileEmail').value = email;
+    if (!token) {
+        window.location.href = '/';
+        return;
+    }
 
-      // Replace "John Doe" in nav
-      const nameDisplay = document.getElementById('userNameDisplay');
-      if (nameDisplay) nameDisplay.textContent = name;
-    })
-    .catch(err => {
-      console.error('Could not load profile:', err);
-    });
+    try {
+        const response = await fetch('http://localhost:8000/api/auth/profile', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Authentication failed');
+        }
+
+        const data = await response.json();
+        updateUserInfo(data.user);
+    } catch (error) {
+        console.error('Auth check failed:', error);
+        handleLogout();
+    }
 }
 
-loadLoggedInUser();
+function updateUserInfo(user) {
+    const welcomeMessage = document.getElementById('welcomeMessage');
+    const profileName = document.getElementById('profileName');
+    
+    if (user.name) {
+        if (welcomeMessage) {
+            welcomeMessage.textContent = `Welcome back, ${user.name}!`;
+        }
+        if (profileName) {
+            profileName.textContent = user.name;
+        }
+        localStorage.setItem('userName', user.name);
+    }
+}
 
-<span id="userNameDisplay">Loading...</span>
-  // Call this at the bottom of dashboard.js
 
 
 
