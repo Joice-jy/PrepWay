@@ -1,78 +1,108 @@
+// server.js
 require('dotenv').config();
-
 const express = require('express');
+const mongoose = require('mongoose');
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
+const bcrypt = require('bcryptjs');
 const path = require('path');
-const rateLimit = require('express-rate-limit');
-const connectDB = require('./config/database');
-const authRoutes = require('./routes/authRoutes');
-const studyRoutes = require('./routes/study');
-const cors = require('cors');
 
 const app = express();
+const PORT = process.env.PORT || 8000;
 
-// Connect to MongoDB
-connectDB();
-
-// Rate limiting
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100 // limit each IP to 100 requests per windowMs
-});
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.static(__dirname));
-app.use('/uploads', express.static('uploads'));
-app.use(limiter);
-
-// Create uploads directory if it doesn't exist
-const fs = require('fs');
-const uploadDir = path.join(__dirname, 'uploads', 'materials');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/study', studyRoutes);
-
-// Serve static files
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-app.get('/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dashboard.html'));
-});
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ error: 'Something went wrong!' });
-});
-
-// Start server
-const PORT = 8000;
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
-
-//////NEWWWW
-app.post('/api/profile/update', (req, res) => {
-    const { name, email } = req.body;
-  
-    // TODO: Replace this with actual user lookup (e.g., from session or JWT)
-    const fakeUserId = '1234';
-  
-    // Save/update user in MongoDB
-    User.findByIdAndUpdate(fakeUserId, { name, email }, { new: true, upsert: true })
-      .then((updatedUser) => {
-        res.json({ success: true, user: updatedUser });
-      })
-      .catch((err) => {
-        console.error('DB error:', err);
-        res.status(500).json({ success: false, error: 'Server error' });
-      });
+// MongoDB connection
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}).then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => {
+    console.error("❌ MongoDB error:", err);
+    process.exit(1);
   });
 
+// User model
+const userSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  password: String,
+});
+const User = mongoose.model('User', userSchema);
+
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Serve static frontend files
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Sessions
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'supersecretkey',
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
+  cookie: { maxAge: 1000 * 60 * 60 * 24 } // 1 day
+}));
+
+// 🔐 Signup
+app.post('/signup', async (req, res) => {
+  const { name, email, password } = req.body;
+  const hashed = await bcrypt.hash(password, 10);
+  const user = await User.create({ name, email, password: hashed });
+  req.session.userId = user._id;
+  res.json({ success: true, user });
+});
+
+// 🔐 Login
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) return res.status(400).json({ error: 'User not found' });
+
+  const match = await bcrypt.compare(password, user.password);
+  if (!match) return res.status(400).json({ error: 'Wrong password' });
+
+  req.session.userId = user._id;
+  res.json({ success: true, user });
+});
+
+// 🔓 Logout
+app.post('/logout', (req, res) => {
+  req.session.destroy();
+  res.json({ success: true });
+});
+
+// 👤 Get profile (used to replace "John Doe")
+app.get('/api/profile', async (req, res) => {
+  if (!req.session.userId) return res.status(401).json({ error: 'Not logged in' });
+
+  const user = await User.findById(req.session.userId);
+  if (!user) return res.status(404).json({ error: 'User not found' });
+
+  res.json({ success: true, user });
+});
+
+// ✏️ Update profile
+app.post('/api/profile/update', async (req, res) => {
+  const { name, email } = req.body;
+  const userId = req.session.userId;
+
+  if (!userId) return res.status(401).json({ error: 'Not logged in' });
+
+  try {
+    const updated = await User.findByIdAndUpdate(
+      userId,
+      { name, email },
+      { new: true }
+    );
+    res.json({ success: true, user: updated });
+  } catch (err) {
+    console.error('Update error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// 🟢 Start the server
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
