@@ -502,24 +502,30 @@ function previewProfilePic() {
   }
 }
 
-////LOAD PROFILE DATA ON PAGE LAOD NEWWWWWWWWWWW
-function loadProfileFromLocal() {
-    const name = localStorage.getItem('profileName');
-    const email = localStorage.getItem('profileEmail');
-  
-    if (name) {
+////
+function loadLoggedInUser() {
+  fetch('/api/profile')
+    .then(res => res.json())
+    .then(data => {
+      const { name, email } = data.user;
+
+      // Update profile modal inputs
       document.getElementById('profileName').value = name;
-      const profileNameDisplay = document.querySelector('.profile-button span');
-      if (profileNameDisplay) profileNameDisplay.textContent = name;
-    }
-  
-    if (email) {
       document.getElementById('profileEmail').value = email;
-    }
-  }
-  
+
+      // Replace "John Doe" in nav
+      const nameDisplay = document.getElementById('userNameDisplay');
+      if (nameDisplay) nameDisplay.textContent = name;
+    })
+    .catch(err => {
+      console.error('Could not load profile:', err);
+    });
+}
+
+loadLoggedInUser();
+
   // Call this at the bottom of dashboard.js
-  loadProfileFromLocal();
+
 
 
 
