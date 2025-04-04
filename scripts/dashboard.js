@@ -524,6 +524,7 @@ function loadLoggedInUser() {
 
 loadLoggedInUser();
 
+<span id="userNameDisplay">Loading...</span>
   // Call this at the bottom of dashboard.js
 
 
